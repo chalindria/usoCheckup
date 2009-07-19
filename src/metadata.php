@@ -5,7 +5,7 @@
       "xmlns":        "usoCheckup:",
       "copyright":    "Copyright (C) 2009+, http://userscripts.org",
       "author":       "Marti Martz (http://userscripts.org/users/37004)",
-      "version":      "4",
+      "version":      "5",
       "license":      "http://usocheckup.googlecode.com/svn/trunk/license.txt",
       "changelog":    "http://code.google.com/p/usocheckup/source/list",
       "contributor": [
