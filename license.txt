@@ -1,6 +1,7 @@
 usoCheckup - @require script updater
 Copyright (C) 2009+, http://userscripts.org
 Marti Martz (http://userscripts.org/users/37004)
+See full metadata in metadata.php
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
