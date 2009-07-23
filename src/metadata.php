@@ -4,7 +4,7 @@
       "name":         "usoCheckup - @require script updater",
       "xmlns":        "usoCheckup:",
       "copyright":    "Copyright (C) 2009+, tHE gREASEmONKEYS (http://userscripts.org)",
-      "version":      "12",
+      "version":      "13",
       "license":      "http://usocheckup.googlecode.com/svn/trunk/license.txt",
       "metadata":     "http://usocheckup.googlecode.com/svn/trunk/src/metadata.php",
       "changelog":    "http://code.google.com/p/usocheckup/source/list",
