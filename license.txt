@@ -1,4 +1,4 @@
-usoCheckup - @require script updater
+usoCheckup - Automatic Script Updater
 Copyright (C) 2009+, http://userscripts.org
 Marti Martz (http://userscripts.org/users/37004)
 See full metadata in metadata.php
