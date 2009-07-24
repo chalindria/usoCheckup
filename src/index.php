@@ -225,7 +225,7 @@ unset( $meta_array );
       get locale() { return {
         "updateAvailable": "<?=$strings['update_available']?>",
         "updateUnavailable": "<?=$strings['update_unavailable']?>",
-        "updateMismatch": "<?=$strings['update_mismatch']?>",
+        "updateMismatched": "<?=$strings['update_mismatched']?>",
         "updateUnlisted": "<?=$strings['update_unlisted']?>",
         "requestWidget": "<?=$strings['request_widget']?>",
         "toggleWidget": "<?=$strings['toggle_widget']?>",

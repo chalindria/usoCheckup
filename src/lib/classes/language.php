@@ -9,7 +9,7 @@ class USO_language
     "en"  =>  array(
       "update_available"    =>  "An update is available.",
       "update_unavailable"  =>  "No update available.",
-      "update_mismatch"     =>  "WARNING: Metadata mismatch!",
+      "update_mismatched"   =>  "WARNING: Metadata mismatched!",
       "update_unlisted"     =>  "WARNING: Unlisted script!",
       "request_widget"      =>  "Check for updates.",
       "toggle_widget"       =>  "Toggle automatic updates.",
