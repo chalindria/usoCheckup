@@ -226,6 +226,7 @@ unset( $meta_array );
         "updateAvailable": "<?=$strings['update_available']?>",
         "updateUnavailable": "<?=$strings['update_unavailable']?>",
         "updateMismatch": "<?=$strings['update_mismatch']?>",
+        "updateUnlisted": "<?=$strings['update_unlisted']?>",
         "requestWidget": "<?=$strings['request_widget']?>",
         "toggleWidget": "<?=$strings['toggle_widget']?>",
         "updaterOff": "<?=$strings['updater_off']?>",

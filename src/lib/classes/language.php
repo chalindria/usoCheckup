@@ -10,6 +10,7 @@ class USO_language
       "update_available"    =>  "An update is available.",
       "update_unavailable"  =>  "No update available.",
       "update_mismatch"     =>  "WARNING: Metadata mismatch!",
+      "update_unlisted"     =>  "WARNING: Unlisted script!",
       "request_widget"      =>  "Check for updates.",
       "toggle_widget"       =>  "Toggle automatic updates.",
       "updater_off"         =>  "Automatic updates are off.",
