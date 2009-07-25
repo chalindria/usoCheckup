@@ -24,6 +24,17 @@ if ( isset( $_GET["custom"] ) && ( strtolower( $_GET["custom"] ) === "true" ||  
 else
   $custom = false;
 
+
+switch ( isset( $_GET["open"] ) ? strtolower( $_GET["open"] ) : "GM" ) {
+  case 'window':
+    $open_method = "window";
+    break;
+  case 'GM':
+  default:
+    $open_method = "GM";
+    break;
+}
+
 $install_uri = "https://userscripts.org/scripts/source/" . $script_id . ".user.js";
 $show_uri = "http://userscripts.org/scripts/show/" . $script_id . "/";
 
@@ -165,9 +176,9 @@ unset( $meta_array );
                 : window.USO.checkup.locale["showConfirm"]
             ].join("\n"))) {
               if (mismatched || unlisted)
-                GM_openInTab(window.USO.checkup.updateURI["show"]);
+                window.USO.checkup.open(window.USO.checkup.updateURI["show"]);
               else
-                GM_openInTab(window.USO.checkup.updateURI[window.USO.checkup.updateURI["default"]]);
+                window.USO.checkup.open(window.USO.checkup.updateURI[window.USO.checkup.updateURI["default"]]);
               }
           } 
           else if (forced)
@@ -287,11 +298,14 @@ unset( $meta_array );
         USO.checkup.request(force ? true : false);
         USO.checkup.lastForce = Math.ceil((new Date().getTime())/1000);
        }
-      }}
+      }},
+      get open() { return function(URI) { <?php if ( $open_method == "window" ) { ?>window.location.href = URI;<?php } else { ?>GM_openInTab(URI);<?php } ?> }}
     }
   };
   var interval = USO.checkup.calculate(window.USO.checkup.maxage) * 60 * 60;
 
-  if (typeof GM_openInTab === "function" && top.location == location)
-    USO.checkup.check();
+  if (top.location == location)
+    <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")
+<?php } ?>
+      USO.checkup.check();
 })();
