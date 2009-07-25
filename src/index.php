@@ -65,8 +65,14 @@ $strings = $uso_language->translate();
 
 $ch = curl_init();
 curl_setopt( $ch, CURLOPT_URL, 'https://userscripts.org/scripts/source/' . $script_id . '.meta.js' );
+curl_setopt( $ch, CURLOPT_FAILONERROR, 1 );
 curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 $output = curl_exec( $ch );
+
+if (curl_errno($ch) != 0) {
+  curl_close( $ch );
+  exit;
+}
 curl_close( $ch );
 
 preg_match_all( '/@(\S+?)(?::(\S+))?(?:[ \t]+([^\r\n]+)|\s+)/', $output, $meta );
