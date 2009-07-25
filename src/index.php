@@ -18,6 +18,12 @@ else
 if ( $days < 1 )
   $days = 30;
 
+
+if ( isset( $_GET["custom"] ) && ( strtolower( $_GET["custom"] ) === "true" ||  $_GET["custom"] === "1" ) )
+  $custom = true;
+else
+  $custom = false;
+
 $install_uri = "https://userscripts.org/scripts/source/" . $script_id . ".user.js";
 $show_uri = "http://userscripts.org/scripts/show/" . $script_id . "/";
 
@@ -148,7 +154,7 @@ unset( $meta_array );
         });
       }},
       widgets: {
-        "alert": function (forced, mismatched, unlisted) {
+<?php if ( !$custom ) { ?>        "alert": function (forced, mismatched, unlisted) {
           if (parseInt(window.USO.checkup.remoteMeta["uso"]["version"]) > parseInt(window.USO.checkup.localMeta["uso"]["version"])) {
             if (confirm([
               window.USO.checkup.localMeta["name"],
@@ -201,8 +207,8 @@ unset( $meta_array );
               }
             }
           );
-        }
-      },
+        }<?php } ?>
+      }
     }
   };
   if (typeof window.USO !== "object") 
