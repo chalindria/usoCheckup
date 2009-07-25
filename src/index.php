@@ -176,9 +176,9 @@ unset( $meta_array );
                 : window.USO.checkup.locale["showConfirm"]
             ].join("\n"))) {
               if (mismatched || unlisted)
-                window.USO.checkup.open(window.USO.checkup.updateURI["show"]);
+                window.USO.checkup.openURI(window.USO.checkup.updateURI["show"]);
               else
-                window.USO.checkup.open(window.USO.checkup.updateURI[window.USO.checkup.updateURI["default"]]);
+                window.USO.checkup.openURI(window.USO.checkup.updateURI[window.USO.checkup.updateURI["default"]]);
               }
           } 
           else if (forced)
@@ -299,7 +299,7 @@ unset( $meta_array );
         USO.checkup.lastForce = Math.ceil((new Date().getTime())/1000);
        }
       }},
-      get open() { return function(URI) { <?php if ( $open_method == "window" ) { ?>window.location.href = URI;<?php } else { ?>GM_openInTab(URI);<?php } ?> }}
+      get openURI() { return function(URI) { <?php if ( $open_method == "window" ) { ?>window.location.href = URI;<?php } else { ?>GM_openInTab(URI);<?php } ?> }}
     }
   };
   var interval = USO.checkup.calculate(window.USO.checkup.maxage) * 60 * 60;
