@@ -21,8 +21,8 @@ if ( $days < 1 )
 
 if ( isset( $_GET["trim"] )
   && ( $_GET["trim"] === "1"
-    ||  strtolower( $_GET["trim"] === "true" )
-    ||  strtolower( $_GET["trim"] === "yes" ) 
+    ||  strtolower( $_GET["trim"] ) === "true"
+    ||  strtolower( $_GET["trim"] ) === "yes"
 ))
   $trim = true;
 else
