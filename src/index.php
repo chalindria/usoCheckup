@@ -19,10 +19,10 @@ if ( $days < 1 )
   $days = 30;
 
 
-if ( isset( $_GET["custom"] ) && ( strtolower( $_GET["custom"] ) === "true" ||  $_GET["custom"] === "1" ) )
-  $custom = true;
+if ( isset( $_GET["trim"] ) && ( strtolower( $_GET["trim"] ) === "1" ||  $_GET["trim"] === "true" ||  $_GET["trim"] === "yes") )
+  $trim = true;
 else
-  $custom = false;
+  $trim = false;
 
 
 switch ( isset( $_GET["open"] ) ? strtolower( $_GET["open"] ) : "GM" ) {
@@ -171,7 +171,7 @@ unset( $meta_array );
         });
       }},
       widgets: {
-<?php if ( !$custom ) { ?>        "alert": function (forced, mismatched, unlisted) {
+<?php if ( !$trim ) { ?>        "alert": function (forced, mismatched, unlisted) {
           if (parseInt(window.USO.checkup.remoteMeta["uso"]["version"]) > parseInt(window.USO.checkup.localMeta["uso"]["version"])) {
             if (confirm([
               window.USO.checkup.localMeta["name"],
