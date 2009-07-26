@@ -19,7 +19,11 @@ if ( $days < 1 )
   $days = 30;
 
 
-if ( isset( $_GET["trim"] ) && ( strtolower( $_GET["trim"] ) === "1" ||  $_GET["trim"] === "true" ||  $_GET["trim"] === "yes") )
+if ( isset( $_GET["trim"] )
+  && ( $_GET["trim"] === "1"
+    ||  strtolower( $_GET["trim"] === "true" )
+    ||  strtolower( $_GET["trim"] === "yes" ) 
+))
   $trim = true;
 else
   $trim = false;
