@@ -128,7 +128,7 @@
       set enabled(value){ GM_setValue("<?=$metadata['xmlns']?>enabled", value ? true : false); },
       get maxage() { return GM_getValue("<?=$metadata['xmlns']?>maxage", parseInt("<?=$days?>")); },
       set maxage(value){
-        if (typeof value !== "number" || value < 0)
+        if (typeof value !== "number" || value < 1)
           value = parseInt("<?=$days?>");
         GM_setValue("<?=$metadata['xmlns']?>maxage", value);
       },
