@@ -107,7 +107,7 @@
                 ].join("\n"));
               }
               else {
-                window.USO.checkup.enabled = true
+                window.USO.checkup.enabled = true;
                 alert([
                   window.USO.checkup.localMeta["name"],
                   "",
