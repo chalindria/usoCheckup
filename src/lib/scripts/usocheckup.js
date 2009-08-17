@@ -58,7 +58,7 @@ var usoCheckup = {
             }
             details.unlisted = (details.remoteMeta["uso"]["unlisted"] === "") ? true: false;
             details.forced = (force) ? true: false;
-            usoCheckup.widgets["alert"](details);
+            usoCheckup.widget["alert"](details);
           }
           else
             usoCheckup.enabled = false;
@@ -70,7 +70,7 @@ var usoCheckup = {
     }
   }},
 
-  widgets: {
+  widget: {
 <?php if ( !$trim ) { ?>    "alert": function (details) {
       if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(usoCheckup.localMeta["uso"]["version"])) {
         if (confirm([
