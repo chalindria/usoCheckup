@@ -27,7 +27,7 @@
         return hours;
       }},
       get check() { return function() {
-        if (window.USO.checkup.enabled && (Math.floor((new Date().getTime())/1000) - USO.checkup.age >= interval))
+        if (USO.checkup.enabled && (Math.floor((new Date().getTime())/1000) - USO.checkup.age >= interval))
           USO.checkup.request();
       }},
       get request() { return function(force) {
@@ -36,59 +36,61 @@
           url: "https://userscripts.org/scripts/source/<?=$script_id?>.meta.js",
           onload: function(xhr) {
             if (xhr.status == 200) {
-              window.USO.checkup.remoteMeta = window.USO.checkup.parseMeta(xhr.responseText);
-              if (parseInt(window.USO.checkup.remoteMeta["uso"]["version"]) > parseInt(window.USO.checkup.localMeta["uso"]["version"])
-                && parseInt(window.USO.checkup.localMeta["uso"]["version"]) >= USO.checkup.newVersion
+              var details = {};
+              details.remoteMeta = USO.checkup.parseMeta(xhr.responseText);
+              if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(USO.checkup.localMeta["uso"]["version"])
+                && parseInt(USO.checkup.localMeta["uso"]["version"]) >= USO.checkup.newVersion
               ) {
                 USO.checkup.backoff = 1;
-                USO.checkup.newVersion = window.USO.checkup.remoteMeta["uso"]["version"];
+                USO.checkup.newVersion = details.remoteMeta["uso"]["version"];
               }
               else if (!force)
                 USO.checkup.backoff += 1;
 
-              if (window.USO.checkup.remoteMeta["name"] !== window.USO.checkup.localMeta["name"]
-                || window.USO.checkup.remoteMeta["namespace"] !== window.USO.checkup.localMeta["namespace"]
+              if (details.remoteMeta["name"] !== USO.checkup.localMeta["name"]
+                || details.remoteMeta["namespace"] !== USO.checkup.localMeta["namespace"]
               ) {
-                window.USO.checkup.enabled = false;
-                var mismatched = true;
+                USO.checkup.enabled = false;
+                details.mismatched = true;
               }
-              var unlisted = (window.USO.checkup.remoteMeta["uso"]["unlisted"] === "") ? true: false;
-              USO.checkup.widgets["alert"](force ? true : false, mismatched ? true : false, unlisted);
+              details.unlisted = (details.remoteMeta["uso"]["unlisted"] === "") ? true: false;
+              details.forced = (force) ? true: false;
+              USO.checkup.widgets["alert"](details);
             }
             else
-              window.USO.checkup.enabled = false;
+              USO.checkup.enabled = false;
 
             USO.checkup.age = Math.floor((new Date().getTime())/1000);
           }
         });
       }},
       widgets: {
-<?php if ( !$trim ) { ?>        "alert": function (forced, mismatched, unlisted) {
-          if (parseInt(window.USO.checkup.remoteMeta["uso"]["version"]) > parseInt(window.USO.checkup.localMeta["uso"]["version"])) {
+<?php if ( !$trim ) { ?>        "alert": function (details) {
+          if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(USO.checkup.localMeta["uso"]["version"])) {
             if (confirm([
-              window.USO.checkup.localMeta["name"],
+              USO.checkup.localMeta["name"],
               "",
-              window.USO.checkup.locale["updateAvailable"],
-              ((window.USO.checkup.updateURI["default"] === "install") && !mismatched && !unlisted)
-                ? window.USO.checkup.locale["installConfirm"]
-                : window.USO.checkup.locale["showConfirm"]
+              USO.checkup.locale["updateAvailable"],
+              ((USO.checkup.updateURI["default"] === "install") && !details.mismatched && !details.unlisted)
+                ? USO.checkup.locale["installConfirm"]
+                : USO.checkup.locale["showConfirm"]
             ].join("\n"))) {
-              if (mismatched || unlisted)
-                window.USO.checkup.openURI(window.USO.checkup.updateURI["show"]);
+              if (details.mismatched || details.unlisted)
+                USO.checkup.openURI(USO.checkup.updateURI["show"]);
               else
-                window.USO.checkup.openURI(window.USO.checkup.updateURI[window.USO.checkup.updateURI["default"]]);
+                USO.checkup.openURI(USO.checkup.updateURI[USO.checkup.updateURI["default"]]);
               }
           } 
-          else if (forced)
+          else if (details.forced)
             alert([
-              window.USO.checkup.localMeta["name"],
+              USO.checkup.localMeta["name"],
               "",
-              window.USO.checkup.locale["updateUnavailable"]
+              USO.checkup.locale["updateUnavailable"]
             ].join("\n"));
         },
-        "request": function() {
+        "query": function() {
           GM_registerMenuCommand(
-            window.USO.checkup.localMeta["name"] + ": " + window.USO.checkup.locale["requestWidget"],
+            USO.checkup.localMeta["name"] + ": " + USO.checkup.locale["queryWidget"],
             function() {
               USO.checkup.request(true); 
             }
@@ -96,39 +98,33 @@
         },
         "toggle": function() {
           GM_registerMenuCommand(
-            window.USO.checkup.localMeta["name"] + ": " + window.USO.checkup.locale["toggleWidget"],
+            USO.checkup.localMeta["name"] + ": " + USO.checkup.locale["toggleWidget"],
             function() {
-              if (window.USO.checkup.enabled === true) {
-                window.USO.checkup.enabled = false;
+              if (USO.checkup.enabled === true) {
+                USO.checkup.enabled = false;
                 alert([
-                  window.USO.checkup.localMeta["name"],
+                  USO.checkup.localMeta["name"],
                   "",
-                  window.USO.checkup.locale["updaterOff"]
+                  USO.checkup.locale["updaterOff"]
                 ].join("\n"));
               }
               else {
-                window.USO.checkup.enabled = true;
+                USO.checkup.enabled = true
                 alert([
-                  window.USO.checkup.localMeta["name"],
+                  USO.checkup.localMeta["name"],
                   "",
-                  window.USO.checkup.locale["updaterOn"]
+                  USO.checkup.locale["updaterOn"]
                 ].join("\n"));
               }
             }
           );
         }<?php } ?>
-      }
-    }
-  };
-  if (typeof window.USO !== "object") 
-    window.USO = {};
-  window.USO = {
-    checkup: {
+      },
       get enabled() { return GM_getValue("<?=$metadata['xmlns']?>enabled", true); },
       set enabled(value){ GM_setValue("<?=$metadata['xmlns']?>enabled", value ? true : false); },
       get maxage() { return GM_getValue("<?=$metadata['xmlns']?>maxage", parseInt("<?=$days?>")); },
       set maxage(value){
-        if (typeof value !== "number" || value < 1)
+        if (typeof value !== "number" || value < 0)
           value = parseInt("<?=$days?>");
         GM_setValue("<?=$metadata['xmlns']?>maxage", value);
       },
@@ -142,7 +138,7 @@
         "updateUnavailable": "<?=$strings['update_unavailable']?>",
         "updateMismatched": "<?=$strings['update_mismatched']?>",
         "updateUnlisted": "<?=$strings['update_unlisted']?>",
-        "requestWidget": "<?=$strings['request_widget']?>",
+        "queryWidget": "<?=$strings['query_widget']?>",
         "toggleWidget": "<?=$strings['toggle_widget']?>",
         "updaterOff": "<?=$strings['updater_off']?>",
         "updaterOn": "<?=$strings['updater_on']?>",
@@ -180,6 +176,22 @@
             headers["licence"] = headers["license"];
           return headers;
         }},
+      get openURI() { return function(URI) { GM_openInTab(URI); }}
+    }
+  };
+  if (typeof window.USO !== "object") 
+    window.USO = {};
+  window.USO = {
+    checkup: {
+      get enabled() { return USO.checkup.enabled; },
+      set enabled(value) { USO.checkup.enabled = value; },
+      get maxage() { return USO.checkup.maxage },
+      set maxage(value) { USO.checkup.maxage = value;},
+      get updateURI() { return USO.checkup.updateURI;},
+      get locale() { return USO.checkup.locale;},
+      get updaterMeta() { return USO.checkup.updaterMeta;},
+      get localMeta() { return USO.checkup.localMeta;},
+      get parseMeta() { return function(metadataBlock) { USO.checkup.parseMeta(metadataBlock); }},
       get widgets() { return function(widget, callback) {
           widget = widget.toLowerCase();
           switch (widget) {
@@ -200,7 +212,7 @@
       get openURI() { return function(URI) { <?php if ( $open_method == "window" ) { ?>window.location.href = URI;<?php } else { ?>GM_openInTab(URI);<?php } ?> }}
     }
   };
-  var interval = USO.checkup.calculate(window.USO.checkup.maxage) * 60 * 60;
+  var interval = USO.checkup.calculate(USO.checkup.maxage) * 60 * 60;
 
   if (top.location == location)
     <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")
