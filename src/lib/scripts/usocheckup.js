@@ -197,6 +197,5 @@ var usoCheckup = {
 usoCheckup._interval = usoCheckup._calculate(usoCheckup.maxage) * 60 * 60;
 
 if (top.location == location)
-  <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")
-<?php } ?>
+  <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")<?php } else { ?>if (typeof GM_xmlhttpRequest === "function") <?php } ?><?="\n"?>
     usoCheckup._check();
