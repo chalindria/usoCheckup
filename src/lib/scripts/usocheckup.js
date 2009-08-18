@@ -1,7 +1,7 @@
 // @name        <?=$metadata['name']."\n"?>
 // @copyright   <?=$metadata['copyright']."\n"?>
 // @license     <?=$metadata['license']."\n"?>
-// @version     1.0.<?=$metadata['version'].".1\n"?>
+// @version     1.0.<?=$metadata['version']."\n"?>
 // @changelog   <?=$metadata['changelog']."\n"?>
 // @metadata    <?=$metadata['metadata']."\n"?>
 
@@ -200,5 +200,3 @@ if (top.location == location)
   <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")
 <?php } ?>
     usoCheckup._check();
-
-// Version 1.0.<?=$metadata['version']."."?>

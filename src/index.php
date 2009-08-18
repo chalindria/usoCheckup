@@ -110,4 +110,4 @@ $meta = $meta_safe;
 $meta_string = json_encode( $meta_array );
 unset( $meta_array );
 
-?><?=require_once 'lib/scripts/usocheckup.js'?>
+?><?php require_once 'lib/scripts/usocheckup.js' ?>
