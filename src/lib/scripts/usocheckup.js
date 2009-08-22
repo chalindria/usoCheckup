@@ -100,6 +100,7 @@ var usoCheckup = function() {
     }},
     get openUrl() { return function(url) { <?php if ( $open_method == "window" ) { ?>window.location.href = url;<?php } else { ?>GM_openInTab(url);<?php } ?> }},
     get locale() { return {
+      "lang": "<?php echo $strings['lang'] ?>",
       "updateAvailable": "<?php echo $strings['update_available'] ?>",
       "updateUnavailable": "<?php echo $strings['update_unavailable'] ?>",
       "updateMismatched": "<?php echo $strings['update_mismatched'] ?>",

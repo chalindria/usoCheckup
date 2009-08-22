@@ -66,6 +66,7 @@ else
   $uso_language = new USO_language();
 
 $strings = $uso_language->translate();
+$strings["lang"] = $uso_language->language_code;
 
 $ch = curl_init();
 curl_setopt( $ch, CURLOPT_URL, 'https://userscripts.org/scripts/source/' . $script_id . '.meta.js' );

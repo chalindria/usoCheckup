@@ -41,8 +41,10 @@ class USO_language
       return $translation;
     
     // Default to English
-    else if ( isset( $this->language_strings[ "en" ] ) )
-      return $this->language_strings[ "en" ];
+    else if ( isset( $this->language_strings[ "en" ] ) ) {
+      $this->language_code = "en";  // override selected lang
+      return $this->language_strings[ $this->language_code ];
+    }
     
     // Shouldn't happen
     return false;
