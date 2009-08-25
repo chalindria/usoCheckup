@@ -99,7 +99,7 @@ var usoCheckup = function() {
       "show": "<?php echo $show_uri ?>"
     }},
     get openUrl() { return function(url) { <?php if ( $open_method == "window" ) { ?>window.location.href = url;<?php } else { ?>GM_openInTab(url);<?php } ?> }},
-    locale: {
+    get locale() { return {
       "lang": "<?php echo $strings['lang'] ?>",
       "updateAvailable": "<?php echo $strings['update_available'] ?>",
       "updateUnavailable": "<?php echo $strings['update_unavailable'] ?>",
@@ -111,7 +111,7 @@ var usoCheckup = function() {
       "updaterOn": "<?php echo $strings['updater_on'] ?>",
       "showConfirm": "<?php echo $strings['show_confirm'] ?>",
       "installConfirm": "<?php echo $strings['install_confirm'] ?>"
-    },
+    }},
     get updaterMeta() { return <?php echo json_encode($metadata) ?>; },
     get localMeta() { return <?php echo $meta_string ?>; },
     get parseMeta() { return function(metadataBlock) {
