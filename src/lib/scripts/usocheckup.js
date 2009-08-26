@@ -35,10 +35,10 @@ var usoCheckup = function() {
           if (confirm([
             usoCheckup.localMeta["name"],
             "",
-            usoCheckup.locale["updateAvailable"],
+            usoCheckup.locales["updateAvailable"],
             ((usoCheckup.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
-              ? usoCheckup.locale["installConfirm"]
-              : usoCheckup.locale["showConfirm"]
+              ? usoCheckup.locales["installConfirm"]
+              : usoCheckup.locales["showConfirm"]
           ].join("\n"))) {
             if (details.mismatched || details.unlisted)
               usoCheckup.openUrl(usoCheckup.updateUrl["show"]);
@@ -50,12 +50,12 @@ var usoCheckup = function() {
           alert([
             usoCheckup.localMeta["name"],
             "",
-            usoCheckup.locale["updateUnavailable"]
+            usoCheckup.locales["updateUnavailable"]
           ].join("\n"));
       },
       "query": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.locale["queryWidget"],
+          usoCheckup.localMeta["name"] + ": " + usoCheckup.locales["queryWidget"],
           function() {
             usoCheckup.request(true); 
           }
@@ -63,14 +63,14 @@ var usoCheckup = function() {
       },
       "toggle": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.locale["toggleWidget"],
+          usoCheckup.localMeta["name"] + ": " + usoCheckup.locales["toggleWidget"],
           function() {
             if (usoCheckup.enabled === true) {
               usoCheckup.enabled = false;
               alert([
                 usoCheckup.localMeta["name"],
                 "",
-                usoCheckup.locale["updaterOff"]
+                usoCheckup.locales["updaterOff"]
               ].join("\n"));
             }
             else {
@@ -78,7 +78,7 @@ var usoCheckup = function() {
               alert([
                 usoCheckup.localMeta["name"],
                 "",
-                usoCheckup.locale["updaterOn"]
+                usoCheckup.locales["updaterOn"]
               ].join("\n"));
             }
           }
@@ -99,7 +99,7 @@ var usoCheckup = function() {
       "show": "<?php echo $show_uri ?>"
     }},
     get openUrl() { return function(url) { <?php if ( $open_method == "window" ) { ?>window.location.href = url;<?php } else { ?>GM_openInTab(url);<?php } ?> }},
-    get locale() { return {
+    get locales() { return {
       "lang": "<?php echo $strings['lang'] ?>",
       "updateAvailable": "<?php echo $strings['update_available'] ?>",
       "updateUnavailable": "<?php echo $strings['update_unavailable'] ?>",
@@ -210,7 +210,7 @@ var usoCheckup = function() {
     set maxage(value) { usoCheckup.maxage = value;},
     get updateUrl() { return usoCheckup.updateUrl;},
     get openUrl() { return function(url) { usoCheckup.openUrl(url); }},
-    get locale() { return usoCheckup.locale;},
+    get locales() { return usoCheckup.locales;},
     get updaterMeta() { return usoCheckup.updaterMeta;},
     get localMeta() { return usoCheckup.localMeta;},
     get parseMeta() { return function(metadataBlock) { return usoCheckup.parseMeta(metadataBlock); }},
