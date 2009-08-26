@@ -9,10 +9,10 @@ class USO_language
     "en"  =>  array(
       "update_available"    =>  "An update is available.",
       "update_unavailable"  =>  "No update available.",
-      "update_mismatched"   =>  "WARNING: Metadata mismatched!",
+      "update_mismatched"   =>  "WARNING: Metadata is mismatched!",
       "update_unlisted"     =>  "WARNING: Unlisted script!",
-      "query_widget"        =>  "Check for updates.",
-      "toggle_widget"       =>  "Toggle automatic updates.",
+      "query_widget"        =>  "Check for an update.",
+      "toggle_widget"       =>  "Toggle automatic update.",
       "updater_off"         =>  "Automatic updates are off.",
       "updater_on"          =>  "Automatic updates are on.",
       "show_confirm"        =>  "Do you want to show the script homepage?",
