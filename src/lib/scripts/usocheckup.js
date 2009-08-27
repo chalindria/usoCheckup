@@ -30,7 +30,7 @@ var usoCheckup = function() {
         usoCheckup.request();
     }},
     widget: {
-<?php if ( !$trim ) { ?>      "alert": function (details) {
+<?php if ( !$custom ) { ?>      "alert": function (details) {
         if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(usoCheckup.localMeta["uso"]["version"])) {
           if (confirm([
             usoCheckup.localMeta["name"],

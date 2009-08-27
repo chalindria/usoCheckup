@@ -19,14 +19,14 @@ if ( $days < 1 )
   $days = 30;
 
 
-if ( isset( $_GET["trim"] )
-  && ( $_GET["trim"] === "1"
-    ||  strtolower( $_GET["trim"] ) === "true"
-    ||  strtolower( $_GET["trim"] ) === "yes"
+if ( isset( $_GET["custom"] )
+  && ( $_GET["custom"] === "1"
+    ||  strtolower( $_GET["custom"] ) === "true"
+    ||  strtolower( $_GET["custom"] ) === "yes"
 ))
-  $trim = true;
+  $custom = true;
 else
-  $trim = false;
+  $custom = false;
 
 
 switch ( isset( $_GET["open"] ) ? strtolower( $_GET["open"] ) : "GM" ) {
