@@ -13,8 +13,8 @@ class USO_language
       "update_unlisted"     =>  "WARNING: Script is not listed!",
       "query_widget"        =>  "Check for an update.",
       "toggle_widget"       =>  "Toggle automatic update.",
-      "updater_off"         =>  "Automatic updates are off.",
-      "updater_on"          =>  "Automatic updates are on.",
+      "updater_off"         =>  "Automatic update is disabled.",
+      "updater_on"          =>  "Automatic update is enabled.",
       "show_confirm"        =>  "Do you want to show the script homepage?",
       "install_confirm"     =>  "Do you want to install the script?"
     )
