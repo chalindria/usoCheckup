@@ -35,10 +35,10 @@ var usoCheckup = function() {
           if (confirm([
             usoCheckup.localMeta["name"],
             "",
-            usoCheckup.strings["updateAvailable"],
+            usoCheckup.string["updateAvailable"],
             ((usoCheckup.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
-              ? usoCheckup.strings["installConfirm"]
-              : usoCheckup.strings["showConfirm"]
+              ? usoCheckup.string["installConfirm"]
+              : usoCheckup.string["showConfirm"]
           ].join("\n"))) {
             if (details.mismatched || details.unlisted)
               usoCheckup.openUrl(usoCheckup.updateUrl["show"]);
@@ -50,12 +50,12 @@ var usoCheckup = function() {
           alert([
             usoCheckup.localMeta["name"],
             "",
-            usoCheckup.strings["updateUnavailable"]
+            usoCheckup.string["updateUnavailable"]
           ].join("\n"));
       },
       "query": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.strings["queryWidget"],
+          usoCheckup.localMeta["name"] + ": " + usoCheckup.string["queryWidget"],
           function() {
             usoCheckup.request(true); 
           }
@@ -63,14 +63,14 @@ var usoCheckup = function() {
       },
       "toggle": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.strings["toggleWidget"],
+          usoCheckup.localMeta["name"] + ": " + usoCheckup.string["toggleWidget"],
           function() {
             if (usoCheckup.enabled === true) {
               usoCheckup.enabled = false;
               alert([
                 usoCheckup.localMeta["name"],
                 "",
-                usoCheckup.strings["updaterOff"]
+                usoCheckup.string["updaterOff"]
               ].join("\n"));
             }
             else {
@@ -78,7 +78,7 @@ var usoCheckup = function() {
               alert([
                 usoCheckup.localMeta["name"],
                 "",
-                usoCheckup.strings["updaterOn"]
+                usoCheckup.string["updaterOn"]
               ].join("\n"));
             }
           }
@@ -99,7 +99,7 @@ var usoCheckup = function() {
       "show": "<?php echo $show_uri ?>"
     }},
     get openUrl() { return function(url) { <?php if ( $open_method == "window" ) { ?>window.location.href = url;<?php } else { ?>GM_openInTab(url);<?php } ?> }},
-    get strings() { return {
+    string: {
       "lang": "<?php echo $strings['lang'] ?>",
       "updateAvailable": "<?php echo $strings['update_available'] ?>",
       "updateUnavailable": "<?php echo $strings['update_unavailable'] ?>",
@@ -111,7 +111,7 @@ var usoCheckup = function() {
       "updaterOn": "<?php echo $strings['updater_on'] ?>",
       "showConfirm": "<?php echo $strings['show_confirm'] ?>",
       "installConfirm": "<?php echo $strings['install_confirm'] ?>"
-    }},
+    },
     get updaterMeta() { return <?php echo json_encode($metadata) ?>; },
     get localMeta() { return <?php echo $meta_string ?>; },
     get parseMeta() { return function(metadataBlock) {
@@ -194,6 +194,11 @@ var usoCheckup = function() {
             usoCheckup.widget[widget](); 
           break;
       }
+    }},
+    get strings() { return function(string, value) {
+      if (typeof value === "string" && typeof usoCheckup.string[string] === "undefined")
+        usoCheckup.string[string] = value;
+      return usoCheckup.string[string];
     }}
   };
 
@@ -210,7 +215,7 @@ var usoCheckup = function() {
     set maxage(value) { usoCheckup.maxage = value; },
     get updateUrl() { return usoCheckup.updateUrl; },
     get openUrl() { return function(url) { usoCheckup.openUrl(url); }},
-    get strings() { return usoCheckup.strings; },
+    get strings() { return function(string, value) { return usoCheckup.strings(string, value); }},
     get updaterMeta() { return usoCheckup.updaterMeta; },
     get localMeta() { return usoCheckup.localMeta; },
     get parseMeta() { return function(metadataBlock) { return usoCheckup.parseMeta(metadataBlock); }},
