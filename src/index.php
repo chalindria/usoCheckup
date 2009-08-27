@@ -68,6 +68,18 @@ else
 $strings = $uso_language->translate();
 $strings["lang"] = $uso_language->language_code;
 
+$trim = false;
+if ( isset( $_GET["trim"] )) {
+  $trim_lang = preg_split( "/[,]+/", (string)( stripslashes( $_GET['trim'] ) ) );
+
+  foreach ($trim_lang as $lang) {
+    if ( $uso_language->language_code == $lang ) {
+      $trim = true;
+      break;
+    }
+  }
+}
+
 $ch = curl_init();
 curl_setopt( $ch, CURLOPT_URL, 'https://userscripts.org/scripts/source/' . $script_id . '.meta.js' );
 curl_setopt( $ch, CURLOPT_FAILONERROR, 1 );

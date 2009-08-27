@@ -83,7 +83,8 @@ var usoCheckup = function() {
             }
           }
         );
-      }<?php } ?>
+      }
+<?php } ?>
     },
     get enabled() { return GM_getValue("<?php echo $metadata['xmlns'] ?>enabled", true); },
     set enabled(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>enabled", value ? true : false); },
@@ -100,7 +101,7 @@ var usoCheckup = function() {
     }},
     get openUrl() { return function(url) { <?php if ( $open_method == "window" ) { ?>window.location.href = url;<?php } else { ?>GM_openInTab(url);<?php } ?> }},
     string: {
-      "lang": "<?php echo $strings['lang'] ?>",
+      "lang": "<?php echo $strings['lang'] ?>"<?php if ( !$trim ) { ?>,
       "updateAvailable": "<?php echo $strings['update_available'] ?>",
       "updateUnavailable": "<?php echo $strings['update_unavailable'] ?>",
       "updateMismatched": "<?php echo $strings['update_mismatched'] ?>",
@@ -111,6 +112,7 @@ var usoCheckup = function() {
       "updaterOn": "<?php echo $strings['updater_on'] ?>",
       "showConfirm": "<?php echo $strings['show_confirm'] ?>",
       "installConfirm": "<?php echo $strings['install_confirm'] ?>"
+<?php } else echo "\n"; ?>
     },
     get updaterMeta() { return <?php echo json_encode($metadata) ?>; },
     get localMeta() { return <?php echo $meta_string ?>; },
