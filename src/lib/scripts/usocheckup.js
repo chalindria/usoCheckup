@@ -7,7 +7,7 @@
 
 var usoCheckup = function() {
   var usoCheckup = {
-    lastForce: 0,
+    lastRequest: 0,
     get backoff() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>backoff", 0)); },
     set backoff(value){ Math.floor((GM_setValue("<?php echo $metadata['xmlns'] ?>backoff", value))); },
     get age() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>age", 1)); },
@@ -146,7 +146,10 @@ var usoCheckup = function() {
       return headers;
     }},
     get request() { return function(force) {
-      if (Math.floor((new Date().getTime())/1000 ) - usoCheckup.lastForce > 15 * 60) {
+      var currentRequest;
+      usoCheckup.age = currentRequest = Math.floor((new Date().getTime())/1000 );
+
+      if (currentRequest - usoCheckup.lastRequest > 15 * 60) {
         GM_xmlhttpRequest({
           method: "GET",
           url: "https://userscripts.org/scripts/source/<?php echo $script_id ?>.meta.js",
@@ -175,11 +178,9 @@ var usoCheckup = function() {
             }
             else
               usoCheckup.enabled = false;
-  
-            usoCheckup.age = Math.floor((new Date().getTime())/1000);
           }
         });
-        usoCheckup.lastForce = Math.ceil((new Date().getTime())/1000);
+        usoCheckup.lastRequest = Math.ceil((new Date().getTime())/1000);
       }
     }},
     get widgets() { return function(widget, callback) {
