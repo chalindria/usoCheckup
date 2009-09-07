@@ -5,15 +5,15 @@
 // @changelog   <?php echo $metadata['changelog']."\n" ?>
 // @metadata    <?php echo $metadata['metadata']."\n" ?>
 
-var usoCheckup = function() {
-  var usoCheckup = {
+var <?php echo $metadata['xmlns'] ?> = function() {
+  var <?php echo $metadata['xmlns'] ?> = {
     lastRequest: 0,
-    get backoff() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>backoff", 0)); },
-    set backoff(value){ Math.floor((GM_setValue("<?php echo $metadata['xmlns'] ?>backoff", value))); },
-    get age() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>age", 1)); },
-    set age(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>age", Math.floor(value)); },
-    get newVersion() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>newVersion", 0)); },
-    set newVersion(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>newVersion", parseInt(value)); },
+    get backoff() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:backoff", 0)); },
+    set backoff(value){ Math.floor((GM_setValue("<?php echo $metadata['xmlns'] ?>:backoff", value))); },
+    get age() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:age", 1)); },
+    set age(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:age", Math.floor(value)); },
+    get newVersion() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:newVersion", 0)); },
+    set newVersion(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:newVersion", parseInt(value)); },
     get calculate() { return function(max) {
       var hours = Math.round(Math.exp(this.backoff) * (1 / (Math.exp(4) / 24)));
       max *= 24;
@@ -31,54 +31,54 @@ var usoCheckup = function() {
     }},
     widget: {
 <?php if ( !$custom ) { ?>      "alert": function (details) {
-        if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(usoCheckup.localMeta["uso"]["version"])) {
+        if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"])) {
           if (confirm([
-            usoCheckup.localMeta["name"],
+            <?php echo $metadata['xmlns'] ?>.localMeta["name"],
             "",
-            usoCheckup.string["updateAvailable"],
-            ((usoCheckup.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
-              ? usoCheckup.string["installConfirm"]
-              : usoCheckup.string["showConfirm"]
+            <?php echo $metadata['xmlns'] ?>.string["updateAvailable"],
+            ((<?php echo $metadata['xmlns'] ?>.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
+              ? <?php echo $metadata['xmlns'] ?>.string["installConfirm"]
+              : <?php echo $metadata['xmlns'] ?>.string["showConfirm"]
           ].join("\n"))) {
             if (details.mismatched || details.unlisted)
-              usoCheckup.openUrl(usoCheckup.updateUrl["show"]);
+              <?php echo $metadata['xmlns'] ?>.openUrl(<?php echo $metadata['xmlns'] ?>.updateUrl["show"]);
             else
-              usoCheckup.openUrl(usoCheckup.updateUrl[usoCheckup.updateUrl["default"]]);
+              <?php echo $metadata['xmlns'] ?>.openUrl(<?php echo $metadata['xmlns'] ?>.updateUrl[<?php echo $metadata['xmlns'] ?>.updateUrl["default"]]);
             }
         } 
         else if (details.forced)
           alert([
-            usoCheckup.localMeta["name"],
+            <?php echo $metadata['xmlns'] ?>.localMeta["name"],
             "",
-            usoCheckup.string["updateUnavailable"]
+            <?php echo $metadata['xmlns'] ?>.string["updateUnavailable"]
           ].join("\n"));
       },
       "query": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.string["queryWidget"],
+          <?php echo $metadata['xmlns'] ?>.localMeta["name"] + ": " + <?php echo $metadata['xmlns'] ?>.string["queryWidget"],
           function() {
-            usoCheckup.request(true); 
+            <?php echo $metadata['xmlns'] ?>.request(true); 
           }
         );
       },
       "toggle": function() {
         GM_registerMenuCommand(
-          usoCheckup.localMeta["name"] + ": " + usoCheckup.string["toggleWidget"],
+          <?php echo $metadata['xmlns'] ?>.localMeta["name"] + ": " + <?php echo $metadata['xmlns'] ?>.string["toggleWidget"],
           function() {
-            if (usoCheckup.enabled === true) {
-              usoCheckup.enabled = false;
+            if (<?php echo $metadata['xmlns'] ?>.enabled === true) {
+              <?php echo $metadata['xmlns'] ?>.enabled = false;
               alert([
-                usoCheckup.localMeta["name"],
+                <?php echo $metadata['xmlns'] ?>.localMeta["name"],
                 "",
-                usoCheckup.string["updaterOff"]
+                <?php echo $metadata['xmlns'] ?>.string["updaterOff"]
               ].join("\n"));
             }
             else {
-              usoCheckup.enabled = true
+              <?php echo $metadata['xmlns'] ?>.enabled = true
               alert([
-                usoCheckup.localMeta["name"],
+                <?php echo $metadata['xmlns'] ?>.localMeta["name"],
                 "",
-                usoCheckup.string["updaterOn"]
+                <?php echo $metadata['xmlns'] ?>.string["updaterOn"]
               ].join("\n"));
             }
           }
@@ -86,13 +86,13 @@ var usoCheckup = function() {
       }
 <?php } ?>
     },
-    get enabled() { return GM_getValue("<?php echo $metadata['xmlns'] ?>enabled", true); },
-    set enabled(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>enabled", value ? true : false); },
-    get maxage() { return GM_getValue("<?php echo $metadata['xmlns'] ?>maxage", parseInt("<?php echo $days ?>")); },
+    get enabled() { return GM_getValue("<?php echo $metadata['xmlns'] ?>:enabled", true); },
+    set enabled(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:enabled", value ? true : false); },
+    get maxage() { return GM_getValue("<?php echo $metadata['xmlns'] ?>:maxage", parseInt("<?php echo $days ?>")); },
     set maxage(value){
       if (typeof value !== "number" || value < 0)
         value = parseInt("<?php echo $days ?>");
-      GM_setValue("<?php echo $metadata['xmlns'] ?>maxage", value);
+      GM_setValue("<?php echo $metadata['xmlns'] ?>:maxage", value);
     },
     get updateUrl() { return {
       "default": "<?php echo $default_method ?>",
@@ -156,28 +156,28 @@ var usoCheckup = function() {
           onload: function(xhr) {
             if (xhr.status == 200) {
               var details = {};
-              details.remoteMeta = usoCheckup.parseMeta(xhr.responseText);
-              if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(usoCheckup.localMeta["uso"]["version"])
-                && parseInt(usoCheckup.localMeta["uso"]["version"]) >= usoCheckup.newVersion
+              details.remoteMeta = <?php echo $metadata['xmlns'] ?>.parseMeta(xhr.responseText);
+              if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"])
+                && parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"]) >= <?php echo $metadata['xmlns'] ?>.newVersion
               ) {
-                usoCheckup.backoff = 1;
-                usoCheckup.newVersion = details.remoteMeta["uso"]["version"];
+                <?php echo $metadata['xmlns'] ?>.backoff = 1;
+                <?php echo $metadata['xmlns'] ?>.newVersion = details.remoteMeta["uso"]["version"];
               }
               else if (!force)
-                usoCheckup.backoff += 1;
+                <?php echo $metadata['xmlns'] ?>.backoff += 1;
   
-              if (details.remoteMeta["name"] !== usoCheckup.localMeta["name"]
-                || details.remoteMeta["namespace"] !== usoCheckup.localMeta["namespace"]
+              if (details.remoteMeta["name"] !== <?php echo $metadata['xmlns'] ?>.localMeta["name"]
+                || details.remoteMeta["namespace"] !== <?php echo $metadata['xmlns'] ?>.localMeta["namespace"]
               ) {
-                usoCheckup.enabled = false;
+                <?php echo $metadata['xmlns'] ?>.enabled = false;
                 details.mismatched = true;
               }
               details.unlisted = (details.remoteMeta["uso"]["unlisted"] === "") ? true: false;
               details.forced = (force) ? true: false;
-              usoCheckup.widget["alert"](details);
+              <?php echo $metadata['xmlns'] ?>.widget["alert"](details);
             }
             else
-              usoCheckup.enabled = false;
+              <?php echo $metadata['xmlns'] ?>.enabled = false;
           }
         });
         this.lastRequest = Math.ceil((new Date().getTime())/1000);
@@ -205,24 +205,24 @@ var usoCheckup = function() {
     }}
   };
 
-  var interval = usoCheckup.calculate(this.maxage) * 60 * 60;
+  var interval = <?php echo $metadata['xmlns'] ?>.calculate(this.maxage) * 60 * 60;
 
   if (top.location == location)
     <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")<?php } else { ?>if (typeof GM_xmlhttpRequest === "function") <?php } ?><?="\n"?>
-      usoCheckup.check();
+      <?php echo $metadata['xmlns'] ?>.check();
 
   return {
-    get enabled() { return usoCheckup.enabled; },
-    set enabled(value) { usoCheckup.enabled = value; },
-    get maxage() { return usoCheckup.maxage },
-    set maxage(value) { usoCheckup.maxage = value; },
-    get updateUrl() { return usoCheckup.updateUrl; },
-    get openUrl() { return function(url) { usoCheckup.openUrl(url); }},
-    get strings() { return function(string, value) { return usoCheckup.strings(string, value); }},
-    get updaterMeta() { return usoCheckup.updaterMeta; },
-    get localMeta() { return usoCheckup.localMeta; },
-    get parseMeta() { return function(metadataBlock) { return usoCheckup.parseMeta(metadataBlock); }},
-    get request() { return function(force) { usoCheckup.request(force) }},
-    get widgets() { return function(widget, callback) { usoCheckup.widgets(widget, callback); }}
+    get enabled() { return <?php echo $metadata['xmlns'] ?>.enabled; },
+    set enabled(value) { <?php echo $metadata['xmlns'] ?>.enabled = value; },
+    get maxage() { return <?php echo $metadata['xmlns'] ?>.maxage },
+    set maxage(value) { <?php echo $metadata['xmlns'] ?>.maxage = value; },
+    get updateUrl() { return <?php echo $metadata['xmlns'] ?>.updateUrl; },
+    get openUrl() { return function(url) { <?php echo $metadata['xmlns'] ?>.openUrl(url); }},
+    get strings() { return function(string, value) { return <?php echo $metadata['xmlns'] ?>.strings(string, value); }},
+    get updaterMeta() { return <?php echo $metadata['xmlns'] ?>.updaterMeta; },
+    get localMeta() { return <?php echo $metadata['xmlns'] ?>.localMeta; },
+    get parseMeta() { return function(metadataBlock) { return <?php echo $metadata['xmlns'] ?>.parseMeta(metadataBlock); }},
+    get request() { return function(force) { <?php echo $metadata['xmlns'] ?>.request(force) }},
+    get widgets() { return function(widget, callback) { <?php echo $metadata['xmlns'] ?>.widgets(widget, callback); }}
   };
 }();
