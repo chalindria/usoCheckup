@@ -2,7 +2,15 @@
 
 require_once "metadata.php";
 
-if( !isset( $_GET['scriptid'] ) )
+if ( isset( $_GET['id'] ) ) {
+  $identifier = stripslashes( $_GET['id'] );
+
+  preg_match('/^[^\d\W]\w+/', $identifier, $matches);
+  if ( $matches && $matches[0] == $identifier )
+    $metadata['xmlns'] = $identifier;
+}
+
+if ( !isset( $_GET['scriptid'] ) )
   exit;
 else
   $script_id = (int)stripslashes( $_GET['scriptid'] );
@@ -10,7 +18,7 @@ else
 if ( !$script_id > 0 )
   exit;
 
-if( isset( $_GET['maxage'] ) )
+if ( isset( $_GET['maxage'] ) )
   $days = (int)( stripslashes( $_GET['maxage'] ) );
 else
   $days = 30;
@@ -60,7 +68,7 @@ header( 'Content-Type: application/x-javascript; charset=utf-8' );
 
 require_once 'lib/classes/language.php';
 
-if( isset( $_GET['lang'] ) )
+if ( isset( $_GET['lang'] ) )
   $uso_language = new USO_language( stripslashes( $_GET['lang'] ) );
 else
   $uso_language = new USO_language();
