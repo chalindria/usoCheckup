@@ -15,7 +15,7 @@ var usoCheckup = function() {
     get newVersion() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>newVersion", 0)); },
     set newVersion(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>newVersion", parseInt(value)); },
     get calculate() { return function(max) {
-      var hours = Math.round(Math.exp(usoCheckup.backoff) * (1 / (Math.exp(4) / 24)));
+      var hours = Math.round(Math.exp(this.backoff) * (1 / (Math.exp(4) / 24)));
       max *= 24;
       if (150 < hours)
         hours = Math.round(hours / 168) * 168;
@@ -26,8 +26,8 @@ var usoCheckup = function() {
       return hours;
     }},
     get check() { return function() {
-      if (usoCheckup.enabled && (Math.floor((new Date().getTime())/1000) - usoCheckup.age >= interval))
-        usoCheckup.request();
+      if (this.enabled && (Math.floor((new Date().getTime())/1000) - this.age >= interval))
+        this.request();
     }},
     widget: {
 <?php if ( !$custom ) { ?>      "alert": function (details) {
@@ -147,9 +147,9 @@ var usoCheckup = function() {
     }},
     get request() { return function(force) {
       var currentRequest;
-      usoCheckup.age = currentRequest = Math.floor((new Date().getTime())/1000 );
+      this.age = currentRequest = Math.floor((new Date().getTime())/1000 );
 
-      if (currentRequest - usoCheckup.lastRequest > 15 * 60) {
+      if (currentRequest - this.lastRequest > 15 * 60) {
         GM_xmlhttpRequest({
           method: "GET",
           url: "https://userscripts.org/scripts/source/<?php echo $script_id ?>.meta.js",
@@ -180,7 +180,7 @@ var usoCheckup = function() {
               usoCheckup.enabled = false;
           }
         });
-        usoCheckup.lastRequest = Math.ceil((new Date().getTime())/1000);
+        this.lastRequest = Math.ceil((new Date().getTime())/1000);
       }
     }},
     get widgets() { return function(widget, callback) {
@@ -188,24 +188,24 @@ var usoCheckup = function() {
       switch (widget) {
         case "alert":
           if (typeof callback === "function")
-            usoCheckup.widget[widget] = callback;
+            this.widget[widget] = callback;
           break;
         default:
           if (typeof callback === "function")
-            usoCheckup.widget[widget] = callback;
+            this.widget[widget] = callback;
           else
-            usoCheckup.widget[widget](); 
+            this.widget[widget](); 
           break;
       }
     }},
     get strings() { return function(string, value) {
-      if (typeof value === "string" && typeof usoCheckup.string[string] === "undefined")
-        usoCheckup.string[string] = value;
-      return usoCheckup.string[string];
+      if (typeof value === "string" && typeof this.string[string] === "undefined")
+        this.string[string] = value;
+      return this.string[string];
     }}
   };
 
-  var interval = usoCheckup.calculate(usoCheckup.maxage) * 60 * 60;
+  var interval = usoCheckup.calculate(this.maxage) * 60 * 60;
 
   if (top.location == location)
     <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")<?php } else { ?>if (typeof GM_xmlhttpRequest === "function") <?php } ?><?="\n"?>
