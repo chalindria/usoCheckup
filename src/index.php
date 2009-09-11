@@ -2,12 +2,35 @@
 
 require_once "metadata.php";
 
+$id = $metadata['id'];
 if ( isset( $_GET['id'] ) ) {
   $identifier = stripslashes( $_GET['id'] );
 
-  preg_match('/^[^\d\W]\w+/', $identifier, $matches);
-  if ( $matches && $matches[0] == $identifier )
-    $metadata['xmlns'] = $identifier;
+  preg_match('/^(([^\d\W]\w*)\.([^\d\W]\w*)|[^\d\W]\w*|\(\))/', $identifier, $matches);
+
+  if ( $matches && $matches[0] == $identifier ) {
+    if ( count( $matches ) > 2 ) {
+      $id = $matches[0];
+      $object = $matches[2];
+      $identifier = $matches[3];
+    }
+    else {
+      if ( $matches[1] === "()" ) {
+        $anonymous = true;
+        $identifier = $id;
+      }
+      else {
+        $id = $identifier;
+        $identifier = $matches[1];
+      }
+    }
+  }
+  else {
+    $identifier = $id;
+  }
+}
+else {
+  $identifier = $id;
 }
 
 if ( !isset( $_GET['scriptid'] ) )
@@ -26,8 +49,7 @@ else
 if ( $days < 1 )
   $days = 30;
 
-
-if ( isset( $_GET["custom"] )
+if ( !$anonymous && isset( $_GET["custom"] )
   && ( $_GET["custom"] === "1"
     ||  strtolower( $_GET["custom"] ) === "true"
     ||  strtolower( $_GET["custom"] ) === "yes"
@@ -35,7 +57,6 @@ if ( isset( $_GET["custom"] )
   $custom = true;
 else
   $custom = false;
-
 
 switch ( isset( $_GET["open"] ) ? strtolower( $_GET["open"] ) : "GM" ) {
   case 'window':
@@ -77,7 +98,7 @@ $strings = $uso_language->translate();
 $strings["lang"] = $uso_language->language_code;
 
 $trim = false;
-if ( isset( $_GET["trim"] )) {
+if ( !$anonymous && isset( $_GET["trim"] )) {
   $trim_lang = preg_split( "/[,]+/", (string)( stripslashes( $_GET['trim'] ) ) );
 
   foreach ($trim_lang as $lang) {

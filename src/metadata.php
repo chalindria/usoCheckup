@@ -2,9 +2,9 @@
   $_metadata = 
     '{
       "name":         "usoCheckup - Automatic Script Updater",
-      "xmlns":        "usoCheckup",
+      "id":           "usoCheckup",
       "copyright":    "Copyright (C) 2009+, tHE gREASEmONKEYS (http://userscripts.org)",
-      "version":      "117",
+      "version":      "118",
       "license":      "http://usocheckup.googlecode.com/svn/trunk/license.txt",
       "metadata":     "http://usocheckup.googlecode.com/svn/trunk/src/metadata.php",
       "changelog":    "http://code.google.com/p/usocheckup/source/list",

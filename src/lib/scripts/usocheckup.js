@@ -5,15 +5,20 @@
 // @changelog   <?php echo $metadata['changelog']."\n" ?>
 // @metadata    <?php echo $metadata['metadata']."\n" ?>
 
-var <?php echo $metadata['xmlns'] ?> = function() {
-  var <?php echo $metadata['xmlns'] ?> = {
+<?php if ( $anonymous ) { ?>(<?php } else { ?>
+<?php if ( $object ) { ?>if (typeof <?php echo $object ?> !== "object")
+  var <?php echo $object ?> = {};
+<?php echo $object ?>.<?php echo $identifier ?>
+<?php } else { ?>
+var <?php echo $identifier ?><?php } ?> = <?php } ?>function() {
+  var <?php echo $identifier ?> = {
     lastRequest: 0,
-    get backoff() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:backoff", 0)); },
-    set backoff(value){ Math.floor((GM_setValue("<?php echo $metadata['xmlns'] ?>:backoff", value))); },
-    get age() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:age", 1)); },
-    set age(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:age", Math.floor(value)); },
-    get newVersion() { return parseInt(GM_getValue("<?php echo $metadata['xmlns'] ?>:newVersion", 0)); },
-    set newVersion(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:newVersion", parseInt(value)); },
+    get backoff() { return parseInt(GM_getValue("<?php echo $identifier ?>:backoff", 0)); },
+    set backoff(value){ Math.floor((GM_setValue("<?php echo $identifier ?>:backoff", value))); },
+    get age() { return parseInt(GM_getValue("<?php echo $identifier ?>:age", 1)); },
+    set age(value){ GM_setValue("<?php echo $identifier ?>:age", Math.floor(value)); },
+    get newVersion() { return parseInt(GM_getValue("<?php echo $identifier ?>:newVersion", 0)); },
+    set newVersion(value){ GM_setValue("<?php echo $identifier ?>:newVersion", parseInt(value)); },
     get calculate() { return function(max) {
       var hours = Math.round(Math.exp(this.backoff) * (1 / (Math.exp(4) / 24)));
       max *= 24;
@@ -29,70 +34,13 @@ var <?php echo $metadata['xmlns'] ?> = function() {
       if (this.enabled && (Math.floor((new Date().getTime())/1000) - this.age >= interval))
         this.request();
     }},
-    widget: {
-<?php if ( !$custom ) { ?>      "alert": function (details) {
-        if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"])) {
-          if (confirm([
-            <?php echo $metadata['xmlns'] ?>.localMeta["name"],
-            "",
-            <?php echo $metadata['xmlns'] ?>.string["updateAvailable"],
-            ((<?php echo $metadata['xmlns'] ?>.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
-              ? <?php echo $metadata['xmlns'] ?>.string["installConfirm"]
-              : <?php echo $metadata['xmlns'] ?>.string["showConfirm"]
-          ].join("\n"))) {
-            if (details.mismatched || details.unlisted)
-              <?php echo $metadata['xmlns'] ?>.openUrl(<?php echo $metadata['xmlns'] ?>.updateUrl["show"]);
-            else
-              <?php echo $metadata['xmlns'] ?>.openUrl(<?php echo $metadata['xmlns'] ?>.updateUrl[<?php echo $metadata['xmlns'] ?>.updateUrl["default"]]);
-            }
-        } 
-        else if (details.forced)
-          alert([
-            <?php echo $metadata['xmlns'] ?>.localMeta["name"],
-            "",
-            <?php echo $metadata['xmlns'] ?>.string["updateUnavailable"]
-          ].join("\n"));
-      },
-      "query": function() {
-        GM_registerMenuCommand(
-          <?php echo $metadata['xmlns'] ?>.localMeta["name"] + ": " + <?php echo $metadata['xmlns'] ?>.string["queryWidget"],
-          function() {
-            <?php echo $metadata['xmlns'] ?>.request(true); 
-          }
-        );
-      },
-      "toggle": function() {
-        GM_registerMenuCommand(
-          <?php echo $metadata['xmlns'] ?>.localMeta["name"] + ": " + <?php echo $metadata['xmlns'] ?>.string["toggleWidget"],
-          function() {
-            if (<?php echo $metadata['xmlns'] ?>.enabled === true) {
-              <?php echo $metadata['xmlns'] ?>.enabled = false;
-              alert([
-                <?php echo $metadata['xmlns'] ?>.localMeta["name"],
-                "",
-                <?php echo $metadata['xmlns'] ?>.string["updaterOff"]
-              ].join("\n"));
-            }
-            else {
-              <?php echo $metadata['xmlns'] ?>.enabled = true
-              alert([
-                <?php echo $metadata['xmlns'] ?>.localMeta["name"],
-                "",
-                <?php echo $metadata['xmlns'] ?>.string["updaterOn"]
-              ].join("\n"));
-            }
-          }
-        );
-      }
-<?php } ?>
-    },
-    get enabled() { return GM_getValue("<?php echo $metadata['xmlns'] ?>:enabled", true); },
-    set enabled(value){ GM_setValue("<?php echo $metadata['xmlns'] ?>:enabled", value ? true : false); },
-    get maxage() { return GM_getValue("<?php echo $metadata['xmlns'] ?>:maxage", parseInt("<?php echo $days ?>")); },
+    get enabled() { return GM_getValue("<?php echo $identifier ?>:enabled", true); },
+    set enabled(value){ GM_setValue("<?php echo $identifier ?>:enabled", value ? true : false); },
+    get maxage() { return GM_getValue("<?php echo $identifier ?>:maxage", parseInt("<?php echo $days ?>")); },
     set maxage(value){
       if (typeof value !== "number" || value < 0)
         value = parseInt("<?php echo $days ?>");
-      GM_setValue("<?php echo $metadata['xmlns'] ?>:maxage", value);
+      GM_setValue("<?php echo $identifier ?>:maxage", value);
     },
     get updateUrl() { return {
       "default": "<?php echo $default_method ?>",
@@ -156,33 +104,93 @@ var <?php echo $metadata['xmlns'] ?> = function() {
           onload: function(xhr) {
             if (xhr.status == 200) {
               var details = {};
-              details.remoteMeta = <?php echo $metadata['xmlns'] ?>.parseMeta(xhr.responseText);
-              if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"])
-                && parseInt(<?php echo $metadata['xmlns'] ?>.localMeta["uso"]["version"]) >= <?php echo $metadata['xmlns'] ?>.newVersion
+              details.remoteMeta = <?php echo $id ?>.parseMeta(xhr.responseText);
+              if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $id ?>.localMeta["uso"]["version"])
+                && parseInt(<?php echo $id ?>.localMeta["uso"]["version"]) >= <?php echo $id ?>.newVersion
               ) {
-                <?php echo $metadata['xmlns'] ?>.backoff = 1;
-                <?php echo $metadata['xmlns'] ?>.newVersion = details.remoteMeta["uso"]["version"];
+                <?php echo $id ?>.backoff = 1;
+                <?php echo $id ?>.newVersion = details.remoteMeta["uso"]["version"];
               }
               else if (!force)
-                <?php echo $metadata['xmlns'] ?>.backoff += 1;
+                <?php echo $id ?>.backoff += 1;
   
-              if (details.remoteMeta["name"] !== <?php echo $metadata['xmlns'] ?>.localMeta["name"]
-                || details.remoteMeta["namespace"] !== <?php echo $metadata['xmlns'] ?>.localMeta["namespace"]
+              if (details.remoteMeta["name"] !== <?php echo $id ?>.localMeta["name"]
+                || details.remoteMeta["namespace"] !== <?php echo $id ?>.localMeta["namespace"]
               ) {
-                <?php echo $metadata['xmlns'] ?>.enabled = false;
+                <?php echo $id ?>.enabled = false;
                 details.mismatched = true;
               }
               details.unlisted = (details.remoteMeta["uso"]["unlisted"] === "") ? true: false;
               details.forced = (force) ? true: false;
-              <?php echo $metadata['xmlns'] ?>.widget["alert"](details);
+              <?php echo $id ?>.widget["alert"](details);
             }
             else
-              <?php echo $metadata['xmlns'] ?>.enabled = false;
+              <?php echo $id ?>.enabled = false;
           }
         });
         this.lastRequest = Math.ceil((new Date().getTime())/1000);
       }
     }},
+    widget: {
+<?php if ( !$custom ) { ?>      "alert": function (details) {
+        if (parseInt(details.remoteMeta["uso"]["version"]) > parseInt(<?php echo $id ?>.localMeta["uso"]["version"])) {
+          if (confirm([
+            <?php echo $id ?>.localMeta["name"],
+            "",
+            <?php echo $id ?>.string["updateAvailable"],
+            ((<?php echo $id ?>.updateUrl["default"] === "install") && !details.mismatched && !details.unlisted)
+              ? <?php echo $id ?>.string["installConfirm"]
+              : <?php echo $id ?>.string["showConfirm"]
+          ].join("\n"))) {
+            if (details.mismatched || details.unlisted)
+              <?php echo $id ?>.openUrl(<?php echo $id ?>.updateUrl["show"]);
+            else
+              <?php echo $id ?>.openUrl(<?php echo $id ?>.updateUrl[<?php echo $id ?>.updateUrl["default"]]);
+            }
+        } 
+        else if (details.forced)
+          alert([
+            <?php echo $id ?>.localMeta["name"],
+            "",
+            <?php echo $id ?>.string["updateUnavailable"]
+          ].join("\n"));
+      }<?php if ( !$anonymous ) { ?>,
+      "query": function() {
+        GM_registerMenuCommand(
+          <?php echo $id ?>.localMeta["name"] + ": " + <?php echo $id ?>.string["queryWidget"],
+          function() {
+            <?php echo $id ?>.request(true); 
+          }
+        );
+      },
+      "toggle": function() {
+        GM_registerMenuCommand(
+          <?php echo $id ?>.localMeta["name"] + ": " + <?php echo $id ?>.string["toggleWidget"],
+          function() {
+            if (<?php echo $id ?>.enabled === true) {
+              <?php echo $id ?>.enabled = false;
+              alert([
+                <?php echo $id ?>.localMeta["name"],
+                "",
+                <?php echo $id ?>.string["updaterOff"]
+              ].join("\n"));
+            }
+            else {
+              <?php echo $id ?>.enabled = true
+              alert([
+                <?php echo $id ?>.localMeta["name"],
+                "",
+                <?php echo $id ?>.string["updaterOn"]
+              ].join("\n"));
+            }
+          }
+        );
+      }<?php } ?>
+
+<?php } ?>
+    }
+<?php if ( !$anonymous ) { ?>
+    ,
     get widgets() { return function(widget, callback) {
       widget = widget.toLowerCase();
       switch (widget) {
@@ -203,26 +211,27 @@ var <?php echo $metadata['xmlns'] ?> = function() {
         this.string[string] = value;
       return this.string[string];
     }}
+<?php } ?>
   };
 
-  var interval = <?php echo $metadata['xmlns'] ?>.calculate(this.maxage) * 60 * 60;
+  var interval = <?php echo $id ?>.calculate(this.maxage) * 60 * 60;
 
   if (top.location == location)
     <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")<?php } else { ?>if (typeof GM_xmlhttpRequest === "function") <?php } ?><?="\n"?>
-      <?php echo $metadata['xmlns'] ?>.check();
+      <?php echo $id ?>.check();
 
-  return {
-    get enabled() { return <?php echo $metadata['xmlns'] ?>.enabled; },
-    set enabled(value) { <?php echo $metadata['xmlns'] ?>.enabled = value; },
-    get maxage() { return <?php echo $metadata['xmlns'] ?>.maxage },
-    set maxage(value) { <?php echo $metadata['xmlns'] ?>.maxage = value; },
-    get updateUrl() { return <?php echo $metadata['xmlns'] ?>.updateUrl; },
-    get openUrl() { return function(url) { <?php echo $metadata['xmlns'] ?>.openUrl(url); }},
-    get strings() { return function(string, value) { return <?php echo $metadata['xmlns'] ?>.strings(string, value); }},
-    get updaterMeta() { return <?php echo $metadata['xmlns'] ?>.updaterMeta; },
-    get localMeta() { return <?php echo $metadata['xmlns'] ?>.localMeta; },
-    get parseMeta() { return function(metadataBlock) { return <?php echo $metadata['xmlns'] ?>.parseMeta(metadataBlock); }},
-    get request() { return function(force) { <?php echo $metadata['xmlns'] ?>.request(force) }},
-    get widgets() { return function(widget, callback) { <?php echo $metadata['xmlns'] ?>.widgets(widget, callback); }}
-  };
-}();
+<?php if ( !$anonymous ) { ?>  return {
+    get enabled() { return <?php echo $id ?>.enabled; },
+    set enabled(value) { <?php echo $id ?>.enabled = value; },
+    get maxage() { return <?php echo $id ?>.maxage },
+    set maxage(value) { <?php echo $id ?>.maxage = value; },
+    get updateUrl() { return <?php echo $id ?>.updateUrl; },
+    get openUrl() { return function(url) { <?php echo $id ?>.openUrl(url); }},
+    get strings() { return function(string, value) { return <?php echo $id ?>.strings(string, value); }},
+    get updaterMeta() { return <?php echo $id ?>.updaterMeta; },
+    get localMeta() { return <?php echo $id ?>.localMeta; },
+    get parseMeta() { return function(metadataBlock) { return <?php echo $id ?>.parseMeta(metadataBlock); }},
+    get request() { return function(force) { <?php echo $id ?>.request(force) }},
+    get widgets() { return function(widget, callback) { <?php echo $id ?>.widgets(widget, callback); }}
+  };<?php } ?>
+}<?php if ( $anonymous ) { ?>)<?php } ?>();
