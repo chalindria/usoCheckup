@@ -214,7 +214,7 @@ var <?php echo $identifier ?><?php } ?> = <?php } ?>function() {
 <?php } ?>
   };
 
-  var interval = <?php echo $id ?>.calculate(this.maxage) * 60 * 60;
+  var interval = <?php echo $id ?>.calculate(<?php echo $id ?>.maxage) * 60 * 60;
 
   if (top.location == location)
     <?php if ( $open_method != "window" ) { ?>if (typeof GM_openInTab === "function")<?php } else { ?>if (typeof GM_xmlhttpRequest === "function") <?php } ?><?="\n"?>
