@@ -5,12 +5,12 @@
 // @changelog   <?php echo $metadata['changelog']."\n" ?>
 // @metadata    <?php echo $metadata['metadata']."\n" ?>
 
-<?php if ( $anonymous ) { ?>(<?php } else { ?>
+<?php if ( !$anonymous ) { ?>
 <?php if ( $object ) { ?>if (typeof <?php echo $object ?> !== "object")
   var <?php echo $object ?> = {};
 <?php echo $object ?>.<?php echo $identifier ?>
 <?php } else { ?>
-var <?php echo $identifier ?><?php } ?> = <?php } ?>function() {
+var <?php echo $identifier ?><?php } ?> = <?php } ?>(function() {
   var <?php echo $identifier ?> = {
     lastRequest: 0,
     get backoff() { return parseInt(GM_getValue("<?php echo $identifier ?>:backoff", 0)); },
@@ -233,5 +233,6 @@ var <?php echo $identifier ?><?php } ?> = <?php } ?>function() {
     get parseMeta() { return function(metadataBlock) { return <?php echo $id ?>.parseMeta(metadataBlock); }},
     get request() { return function(force) { <?php echo $id ?>.request(force) }},
     get widgets() { return function(widget, callback) { <?php echo $id ?>.widgets(widget, callback); }}
-  };<?php } ?>
-}<?php if ( $anonymous ) { ?>)<?php } ?>();
+  };
+<?php } ?>
+})();

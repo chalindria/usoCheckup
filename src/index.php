@@ -10,7 +10,7 @@ if ( isset( $_GET['id'] ) ) {
 
   if ( $matches && $matches[0] == $identifier ) {
     if ( count( $matches ) > 2 ) {
-      $id = $matches[0];
+      $id = $matches[3];
       $object = $matches[2];
       $identifier = $matches[3];
     }
