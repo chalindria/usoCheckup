@@ -1,3 +1,5 @@
+ErrorDocument 404 /404.php
+
 #Options +FollowSymlinks
 RewriteEngine On
 RewriteBase /
@@ -5,8 +7,5 @@ RewriteBase /
 # The Friendly URLs part
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# For servers that don't support advanced perl regular expressions yet,
-#   comment out the below two lines.
-RewriteCond %{REQUEST_FILENAME} ^.*?\.js.*$
-RewriteRule ^(.*?)\.js(?:\?([^\#]*))?.*$ index.php?scriptid=$1&$2 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} ^.+\.js.*$
+RewriteRule ^(.*)$ index.php?scriptid=$1 [QSA,L]
