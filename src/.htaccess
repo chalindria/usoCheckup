@@ -1,11 +1,14 @@
+# Handle default Error Document
 ErrorDocument 404 /404.php
 
-#Options +FollowSymlinks
+# Enable the Rewrite Engine
 RewriteEngine On
+
+# Specify the correct URL-prefix to be root of domain
 RewriteBase /
 
-# The Friendly URLs part
+# Discover if a friendly URL was used and modify appropriately
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} ^.+\.js.*$
+RewriteCond %{REQUEST_FILENAME} ^.+\.js$
 RewriteRule ^(.*)$ index.php?scriptid=$1 [QSA,L]
